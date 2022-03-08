@@ -12,9 +12,14 @@ import App from './App'
 import store from './store'
 import router from './router'
 
+import * as directives from '@/directives/'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+// 循环对象，注册自定义指令
+for (const key in directives) {
+  Vue.directive(key, directives[key])
+}
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

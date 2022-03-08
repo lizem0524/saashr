@@ -1,4 +1,4 @@
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
 import { login, getUserInfo, getUserDetailById } from '@/api/user'
 const state = {
   token: getToken(), // 设置token为共享状态 初始化vuex时先从缓存中读取
@@ -31,6 +31,7 @@ const actions = {
     const res = await login(data)
     // 提交响应回来的token给setToken
     context.commit('setToken', res)
+    setTimeStamp()
   },
   // 发起获取用户信息的请求，数据通过mutations提交
   async getUserInfo(context) {
@@ -40,7 +41,13 @@ const actions = {
     const baseInfo = await getUserDetailById(res.userId)
     // 把两个接口拿到的数据合并到userInfo
     context.commit('setUserInfo', { ...res, ...baseInfo })
+    console.log(context.state.userInfo)
     return res // 给后期做权限需要
+  },
+  // 登出
+  logout(context) {
+    context.commit('removeToken')
+    context.commit('removeUserInfo')
   }
 }
 

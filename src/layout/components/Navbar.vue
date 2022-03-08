@@ -10,7 +10,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="staffphoto" class="user-avatar">
+          <img v-imageerror="defaultImg" :src="staffPhoto" class="user-avatar">
           <span class="name">{{ name }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
@@ -40,16 +40,22 @@ export default {
     // Breadcrumb,
     Hamburger
   },
+  data() {
+    return {
+      defaultImg: require('@/assets/common/head.jpg')
+    }
+  },
+
   computed: {
-    ...mapGetters(['sidebar', 'name', 'staffphoto'])
+    ...mapGetters(['sidebar', 'name', 'staffPhoto'])
   },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
-    async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    logout() {
+      this.$store.dispatch('user/logout')
+      this.$router.push('/login')
     }
   }
 }

@@ -1,6 +1,10 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
 import store from '@/store'
+import { Message } from 'element-ui'
+import { getTimeStamp } from '@/utils/auth.js'
+import router from '@/router'
+// 定义token超时事件
+const TimeOut = 3600
 const service = axios.create({
   // 执行npm run dev => .evn.development => api =>跨域代理
   baseURL: process.env.VUE_APP_BASE_API, // npm run build => /prod-api
@@ -8,12 +12,18 @@ const service = axios.create({
 })
 // 请求拦截器
 service.interceptors.request.use(
-  config => {
+  request => {
     // 注入token
     if (store.getters.token) {
-      config.headers['Authorization'] = `Bearer ${store.getters.token}`
+      if (CheckTimeOut()) {
+        store.dispatch('user/logout')
+        router.push('/login')
+        return Promise.reject(new Error('登录超时，请重新登录'))
+      } else {
+        request.headers['Authorization'] = `Bearer ${store.getters.token}`
+      }
     }
-    return config // 必须返回
+    return request // 必须返回
   },
   error => {
     return Promise.reject(error.message)
@@ -35,8 +45,21 @@ service.interceptors.response.use(
     }
   }, // 报错
   error => {
-    Message.error(error.message) // 提示错误信息
-    return Promise.reject(error) // 返回执行错误，让当前的执行链跳出成功，直接进入catch
+    // 当返回数据错误，且状态为10002时为token超时，登出
+    if (error.response && error.response.data && error.response.data.code === 10002) {
+      store.dispatch('user/logout')
+      router.push('/login')
+      return Promise.reject(new Error('登录超时，请重新登录'))
+    } else {
+      Message.error(error.message) // 提示错误信息
+      return Promise.reject(error) // 返回执行错误，让当前的执行链跳出成功，直接进入catch
+    }
   }
 )
+// 定义检查token是否超时的函数
+function CheckTimeOut() {
+  const nowTime = Date.now()
+  const timeStamp = getTimeStamp()
+  return (nowTime - timeStamp) / 1000 > TimeOut
+}
 export default service
