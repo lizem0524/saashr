@@ -11,32 +11,14 @@
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input
-          ref="mobile"
-          v-model="loginForm.mobile"
-          placeholder="请输入手机号"
-          name="mobile"
-          type="text"
-          tabindex="1"
-          auto-complete="on"
-        />
+        <el-input ref="mobile" v-model="loginForm.mobile" placeholder="请输入手机号" name="mobile" type="text" tabindex="1" auto-complete="on" />
       </el-form-item>
 
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
-          :type="passwordType"
-          placeholder="请输入密码"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
-        />
+        <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType" placeholder="请输入密码" name="password" tabindex="2" auto-complete="on" @keyup.enter.native="handleLogin" />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
@@ -45,8 +27,7 @@
       <el-button class="loginBtn" :loading="loading" type="primary" style="width: 100%; margin-bottom: 30px" @click.native.prevent="handleLogin">登录</el-button>
 
       <div class="tips">
-        <span style="margin-right: 20px">账号: admin</span>
-        <span> 密码: 123456</span>
+        <span style="margin-right: 20px"><a href="javascript:;">立即注册</a></span>
       </div>
     </el-form>
   </div>
@@ -70,10 +51,12 @@ export default {
       loginRules: {
         mobile: [
           { required: true, message: '手机号不能为空', trigger: 'blur' },
-          { validator: validateMobile, trigger: 'blur' }],
+          { validator: validateMobile, trigger: 'blur' }
+        ],
         password: [
           { required: true, message: '密码不能为空', trigger: 'blur' },
-          { min: 6, max: 16, message: '密码长度为6-16位', trigger: 'blur' }]
+          { min: 6, max: 16, message: '密码长度为6-16位', trigger: 'blur' }
+        ]
       },
       loading: false,
       passwordType: 'password',
@@ -143,6 +126,7 @@ $cursor: #fff;
 .login-container {
   background-image: url('~@/assets/common/login.jpg');
   background-position: center;
+  padding-top: 80px;
   .el-input {
     display: inline-block;
     height: 47px;
@@ -181,7 +165,6 @@ $cursor: #fff;
     font-size: 24px;
   }
 }
-
 </style>
 
 <style lang="scss" scoped>
@@ -205,13 +188,13 @@ $light_gray: #eee;
   }
 
   .tips {
+    float: right;
     font-size: 14px;
     color: #fff;
     margin-bottom: 10px;
-
-    span {
-      &:first-of-type {
-        margin-right: 16px;
+    a {
+      &:hover {
+        color: #407ffe;
       }
     }
   }
