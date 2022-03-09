@@ -5,6 +5,14 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import employeesRouter from '@/router/employees'
+import approvalsRouter from './approvals'
+import departmentsRouter from './departments'
+import permissionRouter from './permission'
+import salarysRouter from './salarys'
+import settingRouter from './setting'
+import socialRouter from './social'
+import attendancesRouter from './attendances'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -47,22 +55,35 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
-    }]
+    children: [
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/dashboard/index'),
+        meta: { title: '主页', icon: 'dashboard' }
+      }
+    ]
   },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
-
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+// 定义动态路由变量，倒出为了后面做权限用
+export const asyncRoutes = [
+  departmentsRouter,
+  employeesRouter,
+  approvalsRouter,
+  settingRouter,
+  permissionRouter,
+  socialRouter,
+  attendancesRouter,
+  salarysRouter
+]
+const createRouter = () =>
+  new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: [...constantRoutes, ...asyncRoutes]
+  })
 
 const router = createRouter()
 

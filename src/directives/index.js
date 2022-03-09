@@ -5,7 +5,6 @@ export const imageerror = {
     el.src = el.src || binding.value
     // 当src路径失效时触发onerror事件
     el.onerror = function() {
-      console.log('图片错误')
       // 加载失败时读取用户传入的地址
       el.src = binding.value
     }
