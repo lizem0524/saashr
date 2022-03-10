@@ -9,6 +9,7 @@ const mutations = {
   setToken(state, token) {
     state.token = token
     setToken(token) // 同步到cookies
+    console.log(token)
   },
   // 清除内存和cookies的token
   removeToken(state) {
@@ -41,7 +42,6 @@ const actions = {
     const baseInfo = await getUserDetailById(res.userId)
     // 把两个接口拿到的数据合并到userInfo
     context.commit('setUserInfo', { ...res, ...baseInfo })
-    console.log(context.state.userInfo)
     return res // 给后期做权限需要
   },
   // 登出
