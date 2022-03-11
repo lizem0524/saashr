@@ -28,6 +28,7 @@
 
 <script>
 import { delDepartments } from '@/api/departments'
+// import { Message } from 'element-ui'
 export default {
   props: {
     treeNode: {
@@ -47,17 +48,19 @@ export default {
     // 点击添加 编辑 删除时触发
     operateDepts(type) {
       if (type === 'add') {
+        // 把要添加子部门的父部门数据发送给index，再通过index传给弹层组件
         this.$emit('addDepts', this.treeNode)
-        console.log('add')
       } else if (type === 'edit') {
-        console.log('edit')
+        this.$emit('editDepts', this.treeNode)
       } else {
         this.$confirm('您确定要删除该部门吗？').then(() => {
+          // 调用删除接口，传入要删除的节点的id
           return delDepartments(this.treeNode.id)
         }).then(() => {
+          // 删除成功后告诉父组件，让父组件重新渲染页面，并提示删除成功
           this.$emit('delDepts')
           this.$message.success('删除成功')
-        })
+        }).catch(() => {})
       }
     }
   }

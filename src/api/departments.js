@@ -12,6 +12,7 @@ export function delDepartments(id) {
     url: '/company/department/' + id
   })
 }
+// 新增部门的api
 export function addDepartments(data) {
   return request({
     method: 'post',
@@ -19,3 +20,20 @@ export function addDepartments(data) {
     data
   })
 }
+
+// 根据id获取部门详情信息的api
+export function getDepartDetail(id) {
+  return request({
+    url: '/company/department/' + id
+  })
+}
+
+// 编辑部门的api
+export function updateDepartments(data) {
+  return request({
+    method: 'put',
+    url: '/company/department/' + data.id,
+    data
+  })
+}
+

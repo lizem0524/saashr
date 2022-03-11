@@ -13,12 +13,12 @@
         <el-tree :data="departs" :props="defaultProps" :default-expand-all="true">
           <!-- 传入内容 有多少节点就循环多少次 -->
           <!-- 作用域插槽 -->
-          <tree-tools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" @addDepts="addDepts" />
+          <tree-tools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" @addDepts="addDepts" @editDepts="editDepts" />
         </el-tree>
       </el-card>
     </div>
     <!-- 新增弹层组件 -->
-    <add-dept :show-dialog="showDialog" :tree-node="treeNode" @submitAddDepts="getDepartments" />
+    <add-dept ref="addDept" :show-dialog.sync="showDialog" :tree-node="treeNode" :show-title="showTitle" @submitAddDepts="getDepartments" />
   </div>
 </template>
 
@@ -59,21 +59,36 @@ export default {
         children: 'children'
       },
       showDialog: false,
-      treeNode: null
+      treeNode: null,
+      showTitle: ''
     }
   },
   created() {
     this.getDepartments()
   },
   methods: {
+    // 发起部门数据的请求，渲染页面
     async getDepartments() {
       const res = await getDepartments()
       this.company = { name: res.companyName, manager: '负责人', id: '' }
       this.departs = tranListToTreeData(res.depts, '')
     },
+    // 添加事件 接收来自tree-tools被点击的部门节点，并把数据传给弹层组件
     addDepts(treeNode) {
+      this.showTitle = '新增子部门'
+      // 用来弹出弹层
       this.showDialog = true
+      // 告诉弹层要操作哪个部门
       this.treeNode = treeNode
+    },
+    // 编辑事件
+    editDepts(treeNode) {
+      this.showTitle = '编辑部门'
+      // 用来弹出弹层
+      this.showDialog = true
+      // 告诉弹层要操作哪个部门
+      this.treeNode = treeNode
+      this.$refs.addDept.getDepartDetail(this.treeNode.id)
     }
   }
 }
