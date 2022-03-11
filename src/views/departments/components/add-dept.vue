@@ -1,19 +1,19 @@
 <template>
   <el-dialog :title="showTitle" :visible="showDialog" @close="btnCancel">
-    <el-form ref="formData" :model="formData" :rules="rules" label-width="120px">
-      <el-form-item label="部门名称" prop="name">
+    <el-form ref="formData" :model="formData" :rules="rules">
+      <el-form-item label="部门名称" prop="name" label-width="25%">
         <el-input v-model="formData.name" autocomplete="off" style="width: 80%" placeholder="1-50个字符" />
       </el-form-item>
-      <el-form-item prop="code" label="部门编码" style="width: 80%" placeholder="1-50个字符">
-        <el-input v-model="formData.code" autocomplete="off" />
+      <el-form-item prop="code" label="部门编码" label-width="25%" placeholder="1-50个字符">
+        <el-input v-model="formData.code" autocomplete="off" style="width: 80%" />
       </el-form-item>
-      <el-form-item prop="manager" label="部门负责人">
+      <el-form-item prop="manager" label="部门负责人" label-width="25%">
         <el-select v-model="formData.manager" placeholder="请选择" @focus="getEmployeeSimple">
           <!-- 遍历选项 -->
           <el-option v-for="item in peoples" :key="item.id" :label="item.username" :value="item.username" />
         </el-select>
       </el-form-item>
-      <el-form-item prop="introduce" label="部门介绍">
+      <el-form-item prop="introduce" label="部门介绍" label-width="25%">
         <el-input v-model="formData.introduce" autocomplete="off" style="width: 80%" placeholder="1-300个字符" type="textarea" :rows="3" />
       </el-form-item>
     </el-form>
@@ -143,7 +143,12 @@ export default {
     },
     // 点击取消关闭弹层
     btnCancel() {
-      this.formData = {}
+      this.formData = {
+        name: '',
+        code: '',
+        manager: '',
+        introduce: ''
+      }
       // 关闭弹层
       this.$emit('update:showDialog', false)
       // 重置表单
