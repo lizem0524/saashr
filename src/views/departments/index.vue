@@ -18,7 +18,7 @@
       </el-card>
     </div>
     <!-- 新增弹层组件 -->
-    <add-dept ref="addDept" :show-dialog.sync="showDialog" :tree-node="treeNode" :show-title="showTitle" @submitAddDepts="getDepartments" />
+    <add-dept ref="addDept" :show-dialog.sync="showDialog" :tree-node="treeNode" @submitAddDepts="getDepartments" />
   </div>
 </template>
 
@@ -42,7 +42,7 @@ export default {
       departs: [
         // {
         // name: '总裁办',
-        // manager: '曹操大',
+        // manager: '曹操',
         // children: [
         //   {
         //     name: '董事会',
@@ -60,7 +60,6 @@ export default {
       },
       showDialog: false,
       treeNode: null,
-      showTitle: '',
       loading: false
     }
   },
@@ -78,7 +77,6 @@ export default {
     },
     // 添加事件 接收来自tree-tools被点击的部门节点，并把数据传给弹层组件
     addDepts(treeNode) {
-      this.showTitle = '新增子部门'
       // 用来弹出弹层
       this.showDialog = true
       // 告诉弹层要操作哪个部门
@@ -86,7 +84,6 @@ export default {
     },
     // 编辑事件
     async editDepts(treeNode) {
-      this.showTitle = '编辑部门'
       // 告诉弹层要操作哪个部门
       this.treeNode = treeNode
       await this.$refs.addDept.getDepartDetail(this.treeNode.id)

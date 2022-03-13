@@ -1,20 +1,20 @@
 <template>
   <el-dialog :title="showTitle" :visible="showDialog" @close="btnCancel">
-    <el-form ref="formData" :model="formData" :rules="rules">
-      <el-form-item label="部门名称" prop="name" label-width="25%">
-        <el-input v-model="formData.name" autocomplete="off" style="width: 80%" placeholder="1-50个字符" />
+    <el-form ref="formData" :model="formData" :rules="rules" label-width="25%">
+      <el-form-item label="部门名称" prop="name">
+        <el-input v-model="formData.name" style="width: 80%" placeholder="1-50个字符" />
       </el-form-item>
-      <el-form-item prop="code" label="部门编码" label-width="25%" placeholder="1-50个字符">
-        <el-input v-model="formData.code" autocomplete="off" style="width: 80%" />
+      <el-form-item prop="code" label="部门编码" placeholder="1-50个字符">
+        <el-input v-model="formData.code" style="width: 80%" />
       </el-form-item>
-      <el-form-item prop="manager" label="部门负责人" label-width="25%">
+      <el-form-item prop="manager" label="部门负责人">
         <el-select v-model="formData.manager" placeholder="请选择" @focus="getEmployeeSimple">
           <!-- 遍历选项 -->
           <el-option v-for="item in peoples" :key="item.id" :label="item.username" :value="item.username" />
         </el-select>
       </el-form-item>
-      <el-form-item prop="introduce" label="部门介绍" label-width="25%">
-        <el-input v-model="formData.introduce" autocomplete="off" style="width: 80%" placeholder="1-300个字符" type="textarea" :rows="3" />
+      <el-form-item prop="introduce" label="部门介绍">
+        <el-input v-model="formData.introduce" style="width: 80%" placeholder="1-300个字符" type="textarea" :rows="3" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -35,13 +35,8 @@ export default {
     treeNode: {
       type: Object,
       default: null
-    },
-    showTitle: {
-      type: String,
-      default: ''
     }
   },
-
   data() {
     // 检查该部门的子部门名称是否被占用
     const checkNameRepeat = async(rule, value, callback) => {
@@ -69,7 +64,7 @@ export default {
       // 如果表单中有id，则进入编辑校验
       if (this.formData.id) {
         // 已存在的情况:value 等于所有部门编码中的某个值 && 不等于当前部门编辑前的编码
-        isRepeat = depts.some(item => (value && value === item.code) && (value && value !== this.treeNode.code))
+        isRepeat = depts.some(item => value && value === item.code && value && value !== this.treeNode.code)
       } else {
         // 添加子部门
         // 已存在的情况:value等于所有部门编码中的某个值
@@ -102,6 +97,11 @@ export default {
         ]
       },
       peoples: []
+    }
+  },
+  computed: {
+    showTitle() {
+      return this.formData.id ? '编辑部门' : '新增子部门'
     }
   },
   methods: {

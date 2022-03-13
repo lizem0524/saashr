@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <div class="app-container">
       <el-card>
-        <el-tabs value="first">
+        <el-tabs v-loading="loading" value="first">
           <el-tab-pane label="角色管理" name="first">
             <el-row style="height:60px">
               <el-button icon="el-icon-plus" type="primary" size="small" @click="showDialog=true">新增角色</el-button>
@@ -106,7 +106,8 @@ export default {
       },
       rules: {
         name: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }]
-      }
+      },
+      loading: false
     }
   },
   computed: {
@@ -120,9 +121,11 @@ export default {
   methods: {
     // 封装获取角色数据渲染页面的方法
     async getRoleList() {
+      this.loading = true
       const { total, rows } = await getRoleList(this.page)
       this.list = rows
       this.page.total = total
+      this.loading = false
     },
     // 点击分页触发的el事件
     changePage(newPage) {

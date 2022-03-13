@@ -13,7 +13,6 @@ import salarysRouter from './salarys'
 import settingRouter from './setting'
 import socialRouter from './social'
 import attendancesRouter from './attendances'
-
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -61,6 +60,19 @@ export const constantRoutes = [
         name: 'Dashboard',
         component: () => import('@/views/dashboard/index'),
         meta: { title: '主页', icon: 'dashboard' }
+      }
+    ]
+  },
+  // 文件导入的静态路由，不显示在左侧菜单中
+  {
+    path: '/import',
+    name: 'Impormt',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/import')
       }
     ]
   },
