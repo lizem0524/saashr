@@ -60,7 +60,7 @@ export default {
           // 删除成功后告诉父组件，让父组件重新渲染页面，并提示删除成功
           this.$emit('delDepts')
           this.$message.success('删除成功')
-        }).catch(() => {})
+        }).catch((error) => { console.log(error) })
       }
     }
   }

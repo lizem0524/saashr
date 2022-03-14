@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { importEmployee } from '@/api/empoyees'
+import { importEmployee } from '@/api/employees'
 export default {
   methods: {
     async success({ header, results }) {

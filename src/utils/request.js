@@ -4,7 +4,7 @@ import { Message } from 'element-ui'
 import { getTimeStamp } from '@/utils/auth.js'
 import router from '@/router'
 // 定义token超时事件
-const TimeOut = 50000
+const TimeOut = 5000000
 const service = axios.create({
   // 执行npm run dev => .evn.development => api =>跨域代理
   baseURL: process.env.VUE_APP_BASE_API, // npm run build => /prod-api
@@ -28,7 +28,7 @@ service.interceptors.request.use(
   },
   error => {
     Message.error(error.message)
-    return Promise.reject(error.message)
+    return Promise.reject(error)
   }
 )
 // 响应拦截器
@@ -51,12 +51,10 @@ service.interceptors.response.use(
     if (error.response && error.response.data && error.response.data.code === 10002) {
       store.dispatch('user/logout')
       router.push('/login')
-      return Promise.reject(new Error('登录超时，请重新登录'))
-    } else {
-      Message.error(error) // 提示错误信息
-      return Promise.reject(error.message)
-      // 返回执行错误，让当前的执行链跳出成功，直接进入catch
     }
+    Message.error(error.message) // 提示错误信息
+    return Promise.reject(error)
+    // 返回执行错误，让当前的执行链跳出成功，直接进入catch
   }
 )
 // 定义检查token是否超时的函数

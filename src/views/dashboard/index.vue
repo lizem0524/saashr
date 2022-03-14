@@ -1,37 +1,19 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">
-      请输入姓名
-      <input type="text"><button @click="test">检测</button><br>
-      <hr>
-      <div v-if="a">宇子要死了</div>
-    </div>
+    <div class="dashboard-text">name: {{ name }}</div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-// import UploadExcel from '@/components/UploadExcel'
 
 export default {
   name: 'Dashboard',
-  data() {
-    return {
-      a: false
-    }
-  },
-  // components: { UploadExcel },
   computed: {
-    ...mapGetters(['name'])
-  },
-  methods: {
-    test() {
-      setTimeout(() => {
-        this.a = true
-      }, 1000)
-    }
+    ...mapGetters([
+      'name'
+    ])
   }
-
 }
 </script>
 

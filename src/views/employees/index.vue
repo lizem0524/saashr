@@ -35,7 +35,7 @@
         </el-table-column>
         <el-table-column label="操作" align="center" sortable="" min-width="20%">
           <template v-slot="{row}">
-            <el-button type="text" size="small">查看</el-button>
+            <el-button type="text" size="small" @click="$router.push(`/employees/detail/${row.id}`)">查看</el-button>
             <el-button type="text" size="small">转正</el-button>
             <el-button type="text" size="small">调岗</el-button>
             <el-button type="text" size="small">离职</el-button>
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { getEmpoyeesList, delEmployee } from '@/api/empoyees'
+import { getEmployeesList, delEmployee } from '@/api/employees'
 import EmployeesEnum from '@/api/constant/employees'
 import AddEmployee from '@/views/employees/components/add-employee.vue'
 import { formatDate } from '@/filters'
@@ -84,13 +84,13 @@ export default {
     }
   },
   created() {
-    this.getEmpoyeesList()
+    this.getEmployeesList()
   },
   methods: {
     // 渲染页面的函数
-    async getEmpoyeesList() {
+    async getEmployeesList() {
       this.loading = true
-      const { rows, total } = await getEmpoyeesList(this.page)
+      const { rows, total } = await getEmployeesList(this.page)
       this.list = rows
       this.total = total
       this.loading = false
@@ -100,7 +100,7 @@ export default {
       // 修改data中的page
       this.page.page = newPage
       // 重新拉取数据
-      this.getEmpoyeesList()
+      this.getEmployeesList()
     },
     // 按照枚举文件的映射，把聘用形式渲染到页面
     formatEmployment(row, column, cellValue, index) {
@@ -115,7 +115,7 @@ export default {
         await this.$confirm('确定删除该员工吗？')
         await delEmployee(id)
         this.$message.success('删除成功')
-        this.getEmpoyeesList()
+        this.getEmployeesList()
       } catch (error) {
         console.log(error)
       }
@@ -135,7 +135,7 @@ export default {
       // 懒加载excel导出工具，为了使用其中的export_json_to_excel方法
       import('@/vendor/Export2Excel').then(async excel => {
         // 从后端获取所有员工的数据
-        const { rows } = await getEmpoyeesList({ page: 1, size: this.total })
+        const { rows } = await getEmployeesList({ page: 1, size: this.total })
         console.log(rows)
         // 格式化数据
         const data = this.formatJson(headers, rows)

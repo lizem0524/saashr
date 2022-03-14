@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { addEmployee } from '@/api/empoyees'
+import { addEmployee } from '@/api/employees'
 import { getDepartments } from '@/api/departments'
 import { tranListToTreeData } from '@/utils'
 import EmployeeEnum from '@/api/constant/employees'
@@ -125,7 +125,7 @@ export default {
         // 发送添加员工请求
         await addEmployee(this.formData)
         // 从父组件调用渲染页面的函数
-        await this.$parent.getEmpoyeesList && this.$parent.getEmpoyeesList()
+        await this.$parent.getEmployeesList && this.$parent.getEmployeesList()
         // 提示成功
         this.$message.success('添加成功')
         // 关闭弹层
