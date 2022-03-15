@@ -18,6 +18,17 @@
       <el-table :data="list" border="">
         <el-table-column label="序号" align="center" type="index" sortable="" min-width="10%" />
         <el-table-column label="姓名" align="center" prop="username" sortable="" min-width="10%" />
+        <!-- 头像 -->
+        <el-table-column label="头像" align="center" prop="username" min-width="6%">
+          <template v-slot="{row}">
+            <img
+              v-imageerror="require('@/assets/common/userHeader.jpg')"
+              :src="row.staffPhoto"
+              style="width:100% ;border-radius:50%"
+              @click="showQrCode(row.staffPhoto)"
+            >
+          </template>
+        </el-table-column>
         <el-table-column label="工号" align="center" prop="workNumber" sortable="" min-width="10%" />
         <el-table-column label="聘用形式" align="center" prop="formOfEmployment" sortable="" min-width="10%" :formatter="formatEmployment" />
         <el-table-column label="部门" align="center" prop="departmentName" sortable="" min-width="10%" />
@@ -33,7 +44,7 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" sortable="" min-width="20%">
+        <el-table-column label="操作" align="center" min-width="20%">
           <template v-slot="{row}">
             <el-button type="text" size="small" @click="$router.push(`/employees/detail/${row.id}`)">查看</el-button>
             <el-button type="text" size="small">转正</el-button>
@@ -57,6 +68,11 @@
       </el-row>
     </div>
     <add-employee :show-dialog.sync="showDialog" />
+    <el-dialog title="二维码" :visible.sync="showCodeDialog">
+      <el-row type="flex" justify="center">
+        <canvas ref="myCanvas">1</canvas>
+      </el-row>
+    </el-dialog>
   </div>
 
 </template>
@@ -66,6 +82,7 @@ import { getEmployeesList, delEmployee } from '@/api/employees'
 import EmployeesEnum from '@/api/constant/employees'
 import AddEmployee from '@/views/employees/components/add-employee.vue'
 import { formatDate } from '@/filters'
+import QrCode from 'qrcode'
 export default {
   components: {
     AddEmployee
@@ -80,7 +97,8 @@ export default {
       },
       loading: false,
       value: true,
-      showDialog: false
+      showDialog: false,
+      showCodeDialog: false
     }
   },
   created() {
@@ -167,6 +185,17 @@ export default {
           return item[headers[key]]
         })
       })
+    },
+    // 点击头像的事件
+    showQrCode(url) {
+      if (url) {
+        this.showCodeDialog = true
+        this.$nextTick(() => {
+          QrCode.toCanvas(this.$refs.myCanvas, url)
+        })
+      } else {
+        this.$message.warning('该用户未上传头像')
+      }
     }
     // formatJson(headers, rows) {
     //   return rows.map(item => Object.keys(headers).map(key => item[headers[key]])

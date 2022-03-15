@@ -16,7 +16,6 @@
               v-model="userInfo.timeOfEntry"
               type="date"
               class="inputW"
-              value-format="YYYY-MM-DD"
             />
           </el-form-item>
         </el-col>
@@ -59,6 +58,7 @@
         <el-col :span="12">
           <el-form-item label="员工头像">
             <!-- 放置上传图片 -->
+            <image-upload ref="staffPhoto" />
 
           </el-form-item>
         </el-col>
@@ -89,7 +89,7 @@
         </el-form-item>
         <!-- 个人头像 -->
         <!-- 员工照片 -->
-
+        <image-upload />
         <el-form-item label="员工照片">
           <!-- 放置上传图片 -->
         </el-form-item>
@@ -360,22 +360,35 @@ export default {
   },
   created() {
     this.getUserDetail()
-    this.getPersonalDetail()
+    // this.getPersonalDetail()
   }, methods: {
     // 获取用户基本信息
     async getUserDetail() {
       this.userInfo = await getUserDetailById(this.userId)
+      // 加载页面时把服务器拿到的头像路径覆盖到上传组件
+      if (this.userInfo.staffPhoto && this.userInfo.staffPhoto.trim()) {
+        this.$refs.staffPhoto.fileList = [{ url: this.userInfo.staffPhoto, upload: true }]
+      }
     },
+    // 保存用用户基本信息
+    async saveUser() {
+      // 点击保存时拿当前页面的图(从上传组件中赋值)
+      const fileList = this.$refs.staffPhoto.fileList
+      // 检查是否已经上传(上传组件添加图片自动上传，上传完成后会添加一个upload:true)
+      if (fileList.some(item => !item.upload)) {
+        this.$message.warning('图片还没与上传完成')
+        return
+      }
+      // 如果fileList有长度，覆盖原路径，否则传空头像
+      await saveUserDetailById({ ...this.userInfo, staffPhoto: fileList.length ? fileList[0].url : ' ' })
+      this.$message.success('保存用户基本信息成功')
+    },
+    // 以下两个接口已不存在
     // 获取员工个人信息
     async getPersonalDetail() {
       try {
         this.formData = await getPersonalDetail(this.userId)
       } catch (error) { console.log('err', error.message) }
-    },
-    // 保存用用户基本信息
-    async saveUser() {
-      await saveUserDetailById(this.userInfo)
-      this.$message.success('保存用户基本信息成功')
     },
     // 保存个人详情信息
     async savePersonal() {

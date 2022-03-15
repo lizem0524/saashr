@@ -12,11 +12,19 @@ export default {
         icon: 'people'
       }
     },
-    { path: 'detail/:id?', // 动态路由
+    { path: 'detail/:id', // 动态路由
       component: () => import('@/views/employees/detail.vue'),
       hidden: true,
       meta: {
         title: '员工详情'
       }
-    }]
+    },
+    { path: 'print/:id',
+      component: () => import('@/views/employees/print.vue'),
+      hidden: true,
+      meta: {
+        title: '员工信息打印'
+      }
+    }
+  ]
 }

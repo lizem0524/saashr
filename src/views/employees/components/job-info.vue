@@ -1,5 +1,12 @@
 <template>
   <div class="job-info">
+    <el-row type="flex" justify="end">
+      <el-tooltip content="打印岗位信息">
+        <router-link :to="`/employees/print/${userId}?type=job`">
+          <i class="el-icon-printer" />
+        </router-link>
+      </el-tooltip>
+    </el-row>
     <!-- 基础信息 -->
     <el-form label-width="220px">
       <div class="block">
@@ -32,12 +39,12 @@
         </el-form-item>
         <el-form-item label="汇报对象">
           <el-select v-model="formData.reportId" filterable placeholder="请选择" class="inputW">
-            <el-option v-for="item in peaples" :key="item.id" :label="item.username" :value="item.id" />
+            <el-option v-for="item in peoples" :key="item.id" :label="item.username" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="HRBP">
           <el-select v-model="formData.hrbp" filterable placeholder="请选择" class="inputW">
-            <el-option v-for="item in peaples" :key="item.id" :label="item.username" :value="item.id" class="inputW" />
+            <el-option v-for="item in peoples" :key="item.id" :label="item.username" :value="item.id" class="inputW" />
           </el-select>
         </el-form-item>
         <el-form-item class="formInfo" label="调整司龄(天)：">
@@ -165,7 +172,7 @@ export default {
   data() {
     return {
       userId: this.$route.params.id,
-      peaples: [],
+      peoples: [],
       EmployeeEnum,
       formData: {
         adjustmentAgedays: '', // 调整司龄天
@@ -198,8 +205,9 @@ export default {
     }
   },
   created() {
-    this.getJobDetail()
-    this.getEmployeeSimple
+    // 接口错误
+    // this.getJobDetail()
+    this.getEmployeeSimple()
   },
   methods: {
     // 获取岗位信息
@@ -212,7 +220,7 @@ export default {
     },
     // 获取HRBP选择框的数据
     async getEmployeeSimple() {
-      this.peaples = await getEmployeeSimple()
+      this.peoples = await getEmployeeSimple()
     },
     // 保存岗位信息
     async saveJob() {
