@@ -8,7 +8,7 @@
         {{ treeNode.manager }}
       </span>
       <!-- 放置下拉菜单 -->
-      <el-dropdown @command="operateDepts">
+      <el-dropdown trigger="click" @command="operateDepts">
         <!-- 内容 -->
         <span>操作
           <i class="el-icon-arrow-down" />
@@ -80,5 +80,8 @@ export default {
 }
 .tree-right span {
   padding-left: 20px;
+}
+.el-dropdown-selfdefine{
+  color: #5cb6ff;
 }
 </style>

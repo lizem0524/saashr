@@ -17,9 +17,17 @@ router.beforeEach(async(to, from, next) => {
       // 只有没获取过才获取(userInfo中没有内容时)
       if (!store.getters.userId) {
         await store.dispatch('user/getUserInfo')
+        // 拿用户资料中的权限列表
+        const menus = store.state.user.userInfo.roles.menus
         console.log('发起了获取用户资料的请求')
+        // 拿到用户可以访问的动态路由对象的数组
+        const routes = await store.dispatch('permission/filterRoutes', menus)
+        // 添加动态路由
+        router.addRoutes(routes)
+        next(to.path)
+      } else {
+        next()
       }
-      next()
     }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {

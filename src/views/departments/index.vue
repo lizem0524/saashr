@@ -10,7 +10,12 @@
           <tree-tools :tree-node="company" :is-root="true" :icon="'el-icon-s-cooperation'" @addDepts="addDepts" />
         </div>
         <!-- 部门树状图 -->
-        <el-tree :data="departs" :props="defaultProps" :default-expand-all="true">
+        <el-tree
+          :data="departs"
+          :props="defaultProps"
+          :default-expand-all="true"
+          :expand-on-click-node="false"
+        >
           <!-- 传入内容 有多少节点就循环多少次 -->
           <!-- 作用域插槽 -->
           <tree-tools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" @addDepts="addDepts" @editDepts="editDepts" />

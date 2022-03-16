@@ -44,13 +44,14 @@
             />
           </template>
         </el-table-column>
+        <!-- 操作列 -->
         <el-table-column label="操作" align="center" min-width="20%">
           <template v-slot="{row}">
             <el-button type="text" size="small" @click="$router.push(`/employees/detail/${row.id}`)">查看</el-button>
             <el-button type="text" size="small">转正</el-button>
             <el-button type="text" size="small">调岗</el-button>
             <el-button type="text" size="small">离职</el-button>
-            <el-button type="text" size="small">角色</el-button>
+            <el-button type="text" size="small" @click="editRole(row.id)">角色</el-button>
             <el-button type="text" size="small" @click="delEmployee(row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -67,12 +68,16 @@
         />
       </el-row>
     </div>
+    <!-- 添加员工的弹层组件 -->
     <add-employee :show-dialog.sync="showDialog" />
+    <!-- 点击头像的弹层二维码组件 -->
     <el-dialog title="二维码" :visible.sync="showCodeDialog">
       <el-row type="flex" justify="center">
         <canvas ref="myCanvas">1</canvas>
       </el-row>
     </el-dialog>
+    <!-- 角色分配弹层组件 -->
+    <assign-role ref="assignRole" :show-role-dialog.sync="showRoleDialog" :user-id="userId" />
   </div>
 
 </template>
@@ -81,11 +86,13 @@
 import { getEmployeesList, delEmployee } from '@/api/employees'
 import EmployeesEnum from '@/api/constant/employees'
 import AddEmployee from '@/views/employees/components/add-employee.vue'
+import AssignRole from '@/views/employees/assign-role.vue'
 import { formatDate } from '@/filters'
 import QrCode from 'qrcode'
 export default {
   components: {
-    AddEmployee
+    AddEmployee,
+    AssignRole
   },
   data() {
     return {
@@ -98,7 +105,9 @@ export default {
       loading: false,
       value: true,
       showDialog: false,
-      showCodeDialog: false
+      showCodeDialog: false,
+      showRoleDialog: false,
+      userId: null
     }
   },
   created() {
@@ -186,7 +195,11 @@ export default {
         })
       })
     },
-    // 点击头像的事件
+    // formatJson(headers, rows) {
+    //   return rows.map(item => Object.keys(headers).map(key => item[headers[key]])
+    //   )
+    // }
+    // 点击头像弹二维码
     showQrCode(url) {
       if (url) {
         this.showCodeDialog = true
@@ -196,11 +209,14 @@ export default {
       } else {
         this.$message.warning('该用户未上传头像')
       }
+    },
+    // 点击角色事件
+    async editRole(id) {
+      this.userId = id
+      await this.$refs.assignRole.getUserDetailById(this.userId) // 调用弹层组件的获取角色详情的方法
+      this.showRoleDialog = true
     }
-    // formatJson(headers, rows) {
-    //   return rows.map(item => Object.keys(headers).map(key => item[headers[key]])
-    //   )
-    // }
+
   }
 }
 </script>
