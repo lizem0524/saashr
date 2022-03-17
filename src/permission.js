@@ -23,7 +23,7 @@ router.beforeEach(async(to, from, next) => {
         // 拿到用户可以访问的动态路由对象的数组
         const routes = await store.dispatch('permission/filterRoutes', menus)
         // 添加动态路由
-        router.addRoutes(routes)
+        router.addRoutes([...routes, { path: '*', redirect: '/404', hidden: true }])
         next(to.path)
       } else {
         next()

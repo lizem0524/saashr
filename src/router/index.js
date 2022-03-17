@@ -75,9 +75,9 @@ export const constantRoutes = [
         component: () => import('@/views/import')
       }
     ]
-  },
+  }
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+
 ]
 // 定义动态路由变量，倒出为了后面做权限用
 export const asyncRoutes = [
