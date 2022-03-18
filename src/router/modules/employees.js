@@ -6,9 +6,10 @@ export default {
   children: [
     {
       path: '', // 二级路由默认展示组件
+      name: 'employees',
       component: () => import ('@/views/employees'),
       meta: {
-        title: '员工管理', // sideBar读取该属性给左侧按钮命名
+        title: 'employees', // sideBar读取该属性给左侧按钮命名
         icon: 'people'
       }
     },

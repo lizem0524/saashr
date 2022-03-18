@@ -46,7 +46,7 @@ export function saveUserDetailById(data) {
   })
 }
 
-// 获取员工个人信息
+// 获取员工个人信息(失效)
 export function getPersonalDetail(id) {
   return request({
     url: `/employees/${id}/personalInfo`

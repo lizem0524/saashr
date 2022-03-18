@@ -15,6 +15,7 @@ import Components from '@/components'
 import * as directives from '@/directives/'
 import * as filters from '@/filters/'
 import checkPermission from '@/mixin/checkPermission'
+import i18n from '@/lang'
 import '@/icons' // icon
 import '@/permission' // permission control
 
@@ -28,16 +29,18 @@ for (const key in filters) {
 }
 
 // set ElementUI lang to EN
-// Vue.use(ElementUI, { locale })
-Vue.use(ElementUI)
+Vue.use(ElementUI, {
+  i18n: (key, value) => i18n.t(key)
+})
+// Vue.use(ElementUI)
 Vue.use(Components)
 Vue.mixin(checkPermission) // 所有组件的检查方法
 
 Vue.config.productionTip = false
-
 new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   render: h => h(App)
 })

@@ -8,6 +8,9 @@
     <!-- <breadcrumb class="breadcrumb-container" /> -->
 
     <div class="right-menu">
+      <!-- 多语言插件 -->
+      <lang-select class="right-menu-item" />
+      <!-- 头像下拉菜单 -->
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img v-imageerror="defaultImg" :src="staffPhoto" class="user-avatar">
@@ -34,11 +37,12 @@
 import { mapGetters } from 'vuex'
 // import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-
+import LangSelect from './langSelect.vue'
 export default {
   components: {
     // Breadcrumb,
-    Hamburger
+    Hamburger,
+    LangSelect
   },
   data() {
     return {
@@ -120,11 +124,11 @@ export default {
     }
     .right-menu-item {
       display: inline-block;
-      padding: 0 8px;
+      padding: 5px 8px 0 8px;
       height: 100%;
       font-size: 18px;
       color: #5a5e66;
-      vertical-align: text-bottom;
+      vertical-align: middle;
 
       &.hover-effect {
         cursor: pointer;

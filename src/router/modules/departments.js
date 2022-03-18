@@ -5,9 +5,10 @@ export default {
   component: Layout, // 用Layout的原因是员工路由和主页路由是并列关系
   children: [{
     path: '', // 二级路由默认展示组件
+    name: 'departments',
     component: () => import ('@/views/departments'),
     meta: {
-      title: '组织架构', // sideBar读取该属性给左侧按钮命名
+      title: 'departments', // sideBar读取该属性给左侧按钮命名
       icon: 'tree'
     }
   }]
